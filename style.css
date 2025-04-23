@@ -352,7 +352,7 @@ label{
  .addToCartButton {
     float: right;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #2305e7db;
     color: white;
     font-weight: 600;
     cursor: pointer;
@@ -765,8 +765,8 @@ button:hover {
 }
 
 .goToCartBtn {
-    background-color: #222;
-    color: white;
+    background-color: #f80a3d;
+    color: rgb(239, 15, 15);
     border: none;
     padding: 10px 16px;
     border-radius: 8px;

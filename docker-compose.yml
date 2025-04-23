@@ -1,8 +1,17 @@
 version: '3.8'
 
 services:
+
   frontend:
+
     build: .
+
     ports:
+
       - "8081:80"
+
     container_name: my-frontend-container
+
+    volumes:
+    
+      - .:/usr/share/nginx/html
