@@ -1,42 +1,60 @@
 pipeline {
-agent any
+    agent any
 
-environment {
-    GITHUB_TOKEN = credentials('github-token')
-}
-
-stages {
-    stage('Checkout') {
-        steps {
-            git url: 'https://github.com/AnkitKumarSingh22/Sneaker-Store', credentialsId: 'github-token'
-        }
+    environment {
+        GITHUB_TOKEN = credentials('github-token')
+        IMAGE_NAME = 'sneaker-store-app'
     }
 
-    stage('Build Docker Image') {
-        steps {
-            script {
-                sh 'docker build -t sneaker-store-app .'
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git url: 'https://github.com/AnkitKumarSingh22/Sneaker-Store', credentialsId: 'github-token'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${IMAGE_NAME} ."
+                }
+            }
+        }
+
+        stage('Stop Existing Containers') {
+            steps {
+                script {
+                    sh '''
+                        docker rm -f sneaker-store-8081 || true
+                        docker rm -f sneaker-store-8085 || true
+                    '''
+                }
+            }
+        }
+
+        stage('Run Container on Port 8081') {
+            steps {
+                script {
+                    sh "docker run -d --name sneaker-store-8081 -p 8081:80 ${IMAGE_NAME}"
+                }
+            }
+        }
+
+        stage('Run Container on Port 8085') {
+            steps {
+                script {
+                    sh "docker run -d --name sneaker-store-8085 -p 8085:8080 ${IMAGE_NAME}"
+                }
             }
         }
     }
 
-    stage('Run Docker Image') {
-        steps {
-            script {
-                sh 'docker run -d -p 8085:8080 sneaker-store-app'
-            }
+    post {
+        success {
+            echo '✅ Website deployed on both ports: 8081 and 8085'
+        }
+        failure {
+            echo '❌ Build or deployment failed.'
         }
     }
 }
-
-post {
-    success {
-        echo 'Build and deployment succeeded!'
-    }
-    failure {
-        echo 'Build or deployment failed!'
-    }
-}
-}
-
-
