@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GITHUB_TOKEN = credentials('github-token')
-        IMAGE_NAME = 'sneaker-store-app'
+        IMAGE_NAME = 'sneaker-store-frontend'
     }
 
     stages {
@@ -51,7 +51,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Website deployed on both ports: 8081 and 8085'
+            echo '✅ Website deployed successfully on ports 8081 and 8085!'
         }
         failure {
             echo '❌ Build or deployment failed.'
