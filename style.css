@@ -352,11 +352,7 @@ label{
  .addToCartButton {
     float: right;
     padding: 10px;
-<<<<<<< HEAD
-    background-color: #09ee78db;
-=======
-    background-color: #ee093edb;
->>>>>>> 6001fdf0322a764ae8cbbec696b50047d204c170
+    background-color: #23ea09db;
     color: white;
     font-weight: 600;
     cursor: pointer;
