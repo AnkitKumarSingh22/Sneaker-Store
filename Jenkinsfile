@@ -4,6 +4,7 @@ pipeline {
     environment {
         GITHUB_TOKEN = credentials('github-token')
         IMAGE_NAME = 'sneaker-store-frontend'
+        CONTAINER_NAME = 'my-frontend-container'
     }
 
     stages {
@@ -21,29 +22,18 @@ pipeline {
             }
         }
 
-        stage('Stop Existing Containers') {
+        stage('Stop Existing Container') {
             steps {
                 script {
-                    sh '''
-                        docker rm -f sneaker-store-8081 || true
-                        docker rm -f sneaker-store-8085 || true
-                    '''
+                    sh "docker rm -f ${CONTAINER_NAME} || true"
                 }
             }
         }
 
-        stage('Run Container on Port 8081') {
+        stage('Run Updated Container') {
             steps {
                 script {
-                    sh "docker run -d --name sneaker-store-8081 -p 8081:80 ${IMAGE_NAME}"
-                }
-            }
-        }
-
-        stage('Run Container on Port 8085') {
-            steps {
-                script {
-                    sh "docker run -d --name sneaker-store-8085 -p 8085:8080 ${IMAGE_NAME}"
+                    sh "docker run -d --name ${CONTAINER_NAME} -p 8081:80 ${IMAGE_NAME}"
                 }
             }
         }
@@ -51,7 +41,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Website deployed successfully on ports 8081 and 8085!'
+            echo '✅ Website deployed on localhost:8081 as my-frontend-container'
         }
         failure {
             echo '❌ Build or deployment failed.'
